@@ -39,16 +39,53 @@ class Profile:
 
     def __init__(self, n="", t="", c=""):
         """ Creates an instance of a profile. """
-        pass
+        self.name = n
+        self.title = t
+        self.company = c
+        self.connections = []
+        self.employment_history = []
+        self.education = []
 
     def __str__(self):
         """ Returns a string representation of the profile."""
-        pass
+        profile_str = "Profile Information:\n"
+        profile_str += f"Name: {self.name if self.name else 'N/A'}\n"
+        profile_str += f"Current Title: {self.title if self.title else 'N/A'}\n"
+        profile_str += f"Current Company: {self.company if self.company else 'N/A'}\n"
+
+        profile_str += "Connections:\n"
+        if self.connections:
+            for conn in self.connections:
+                profile_str += f"  - {conn.name} ({conn.title} at {conn.company})\n"
+        else:
+            profile_str += "  None\n"
+
+        profile_str += "Employment History:\n"
+        if self.employment_history:
+            for job in self.employment_history:
+                title, company, start, finish = job
+                profile_str += f"  - {title} at {company} ({start} - {finish})\n"
+        else:
+            profile_str += "  None\n"
+
+        profile_str += "Education:\n"
+        if hasattr(self, 'education') and self.education:
+            for edu in self.education:
+                degree, school, start, finish = edu
+                profile_str += f"  - {degree}, {school} ({start} - {finish})\n"
+        else:
+            profile_str += "  None\n"
+
+        return profile_str
 
     def add_connection(self, a_profile):
         """if the input profile is not already connected to self,
         connect them."""
-        pass
+        if a_profile not in self.connections:
+            self.connections.append(a_profile)
+            return True
+        else:
+            return False
 
 
 def connect(p1, p2):
