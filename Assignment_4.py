@@ -39,16 +39,24 @@ class Profile:
 
     def __init__(self, n="", t="", c=""):
         """ Creates an instance of a profile. """
-        pass
+        self.name = n
+        self.title = t
+        self.company = c
+        self.connections = []
+        self.employment_history = []
+        self.education = []
 
     def __str__(self):
         """ Returns a string representation of the profile."""
-        pass
+        return f'NAME:{self.name}, TITLE:{self.title}: COMPANY:{self.company}'
 
     def add_connection(self, a_profile):
         """if the input profile is not already connected to self,
         connect them."""
-        pass
+        if a_profile not in self.connections:
+            self.connections.append(a_profile)
+        else:
+            return "already connected"
 
 
 def connect(p1, p2):
@@ -60,7 +68,9 @@ def connect(p1, p2):
 
     Returns: None
     """
-    pass
+    if p1 not in p2.connections and p2 not in p1.connections:
+        p1.add_connection(p2)
+        p2.add_connection(p1)
 
 
 def where_did_they_work_together(p1, p2):
@@ -72,9 +82,14 @@ def where_did_they_work_together(p1, p2):
     Inputs: Two profile instances.
 
     Returns: The company name if they worked together. False if they did not.
-    """
 
-    pass
+    Hint: Nested For Loops
+    """
+    for role, company, start, end in p1.employment_history:
+        for role2, company2, start2, end2 in p2.employment_history:
+            if company == company2 and start <= end2 and start2 <= end:
+                return company
+    return False
 
 
 def shortest_path(p1, p2):
@@ -89,6 +104,37 @@ def shortest_path(p1, p2):
     Returns: The distance and path between the two input profiles. 
              None if no path is found
     """
+    visited = []
+    q = [(p1, 0, [p1.name])]
+    while q != []:
+        profile = q.pop(0)
+        curr, dist, path = profile
+        visited.append(curr)    #add curr to visited
+        if curr.name == p2.name:
+            return (dist, path)
+        else:
+            for connection in curr.connections:
+                if connection not in visited:
+                    new_path = path + [connection.name]
+                    q.append((connection, dist + 1, new_path))
+    return None
+    #   else
+    #      for each of curr's connections
+    #          if the connection is not already in visited
+    #              append a new triple to q
+    #                  (the node itself,
+    #                  the distance from p1 to that node - computed from dist,
+    #                  the path from p1 to that node - computed from path)
+    # If we hit this point, we never returned an answer. This means that we should
+    #    return None because there is no path between p1 and p2.
+
+
+
+
+
+
+
+
     pass
 
 
