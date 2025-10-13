@@ -118,15 +118,7 @@ def shortest_path(p1, p2):
                     new_path = path + [connection.name]
                     q.append((connection, dist + 1, new_path))
     return None
-    #   else
-    #      for each of curr's connections
-    #          if the connection is not already in visited
-    #              append a new triple to q
-    #                  (the node itself,
-    #                  the distance from p1 to that node - computed from dist,
-    #                  the path from p1 to that node - computed from path)
-    # If we hit this point, we never returned an answer. This means that we should
-    #    return None because there is no path between p1 and p2.
+
 
 
 
