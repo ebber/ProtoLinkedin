@@ -138,7 +138,7 @@ def shortest_path(p1, p2):
         profile = q.pop(0)
         curr, dist, path = profile
         visited.append(curr)    #add curr to visited
-        if curr.name == p2.name:
+        if curr == p2:
             return (dist, path)
         else:
             for connection in curr.connections:
@@ -147,15 +147,6 @@ def shortest_path(p1, p2):
                     q.append((connection, dist + 1, new_path))
     return None
 
-
-
-
-
-
-
-
-
-    pass
 
 
 # EXTENSION #1 - this function would be an extension, but not extra credit
@@ -169,9 +160,35 @@ def shortest_path_to_someone_who(p1, predicate):
 
     Returns: The distance and path between the two input profiles. 
              None if no path is found
-    """
-    pass
+    """#
+    #base caseL if p1 is None, return None
+    #if p1 is None:
+    #    return None
+    #base case: if p1 meets the predicate, return (0, [p1.name])
+    #if predicate(p1):
+    #    return (0, [p1.name])
+    #next level case: for each connection of p1, if the connection meets the predicate, return (1, [p1.name, connection.name]): we want BFS
 
+    #helper function, takes a queue of tuples (profile, distance, path) and visited notes (list of profiles), returns the (dist, path) of the shortest path to someone who meets the predicate 
+    def bfs(queue, visited):
+        if not queue:
+            return None
+        profile, distance, path = queue.pop(0)
+        visited.append(profile) #visit it
+        if predicate(profile):
+            return (distance, path) #found our profile, increment distance and add to path
+        else: #profile not found, recurse
+            for connection in profile.connections:
+                if connection not in visited:
+                    new_path = path + [connection.name]
+                    new_dist = distance+1
+                    queue.append((connection, new_dist, new_path))
+        return bfs(queue, visited)
+    
+    #return the shortest path
+    queue = [(p1, 0, [p1.name])]
+    visited = []
+    return bfs(queue, visited)
 
 # some profiles to work with
 sara = Profile("Sara Sood", "Professor of Computer Science", "Northwestern")
@@ -203,9 +220,10 @@ assert where_did_they_work_together(milan, kris) == False, "where_did_they_work_
 assert shortest_path(sara, kris) == (3,["Sara Sood", "Peter Zhong", "Milan McGraw", "Kris Hammond"]), "shortest path 1"
 assert shortest_path(sara, bob) == None, "shortest path 2"
 
+print(shortest_path_to_someone_who(sara,lambda x:
+                                         x.company == "Deloitte") )
 
 # uncomment the following two test cases if you decide to complete the optional extension
-"""
 # find someone connected to sara who works for deloitte
 assert shortest_path_to_someone_who(sara,lambda x:
                                          x.company == "Deloitte") == (3,
@@ -223,6 +241,4 @@ assert shortest_path_to_someone_who(sara,lambda x:
                                                                        'Peter Zhong',
                                                                        'Milan McGraw',
                                                                        'Kris Hammond'])
-"""
 print("All tests passed!")
-
